@@ -27,3 +27,5 @@ Voila! QueryBridge UI is now set-up on your local.
   <source src="demo/QueryBridge Demo-1.mp4" type="video/mp4">
   QueryBridge Demo Screen Recording
 </video>
+
+<video src="https://github.com/A-Raghav/hack-weekends-2023/blob/main/demo/QueryBridge%20Demo-1.mp4" controls></video>
