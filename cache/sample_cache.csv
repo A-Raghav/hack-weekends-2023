@@ -1,0 +1,14 @@
+source_column,destination_column,transformation,additional_remarks
+patient_gender,gn,"Map the following -
+M if 1
+F if 2
+U if 3",
+col_1,col_2,,
+col1,col2,No transformation to be applied,
+code_1,assn,Remove null value. Replace with blank string,
+start_date,stdt,Convert to date in DD-MM-YYYY format. Also remove null value if it exists,
+src_col,dest_col,"Check if value is NULL or ~, if yes, then remove and return blank string",
+net_cost,amt,"Typecast to numeric. Set precision of 10, scale of 3",
+patient_first_name,fn,remove any trailing or leading whitespaces,
+"col1, col2, col3, col4, col5",bt,Concatenate all columns,
+"cola, colb, colc, cold",cole,"Concatenate all columns with comma (,) in between.",

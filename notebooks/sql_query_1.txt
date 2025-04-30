@@ -1,0 +1,315 @@
+insert into l2.pl_activity (cltp,sid,id_keys,clid,ftst,drdn,ftstn,efdt,eldt,clsfdt,clsldt,rcc,pc,uqt,catp,pm1,pm2,pm3,pm4,pm5,ahc,cid,id,ftccn,cftc,ddt,pfdt,bt,pd,ad,cmnpr,pih,
+cnppc,drdc,drg,ftnpi,atpnpi,spnpi,otpnpi,adjs,adjsn,cpdt,ptsid,atc,rsc,tt,ttn,pdcs,tcamt,imeamt,caia,cdpa,cuca,cdsa,pst,pct,pci,psa1,psa2,pz,dob,bedpa,bedpb,
+gn,race,racen,bfmdst,bfsdcd,dod,hpstdt,hpenddt,fn,mn,"ln",orec,byind,df,ingdt,pipid,rcdt,pthcno,sfn,st,incn,idt,cltc,pcs,sstp,inpid,inpn,inptp,acoid,acon,incid,
+pcpid,tid,tbid,pdn,eid,ptt,rxn,prdt,rxc,rxfdt,pid,pn,pftm,spid,oc,pon,rc,rn,inpfdt,inpldt,rdt,ofdt,ftn,ftspcd,ftsp,atpn,atpsc,atps,spn,spsc,sps,otpn,otpsc,
+otps,pstn,sno)
+select a.*,case  when a.pst = 'AK' then 'Alaska' when a.pst = 'AL' then 'Alabama' when a.pst = 'AR' then 'Arkansas' 
+when a.pst = 'AZ' then 'Arizona' when a.pst = 'CA' then 'California' when a.pst = 'CO' then 'Colorado' 
+when a.pst = 'CT' then 'Connecticut' when a.pst = 'DC' then 'District of Columbia' when a.pst = 'DE' then 'Delaware' 
+when a.pst = 'FL' then 'Florida' when a.pst = 'GA' then 'Georgia' when a.pst = 'HI' then 'Hawaii' when a.pst = 'IA' then 'Iowa' 
+when a.pst = 'ID' then 'Idaho' when a.pst = 'IL' then 'Illinois' when a.pst = 'IN' then 'Indiana' when a.pst = 'KS' then 'Kansas'
+when a.pst = 'KY' then 'Kentucky' when a.pst = 'LA' then 'Louisiana' when a.pst = 'MA' then 'Massachusetts' 
+when a.pst = 'MD' then 'Maryland' when a.pst = 'ME' then 'Maine' when a.pst = 'MI' then 'Michigan' 
+when a.pst = 'MN' then 'Minnesota' when a.pst = 'MO' then 'Missouri' when a.pst = 'MS' then 'Mississippi' 
+when a.pst = 'MT' then 'Montana' when a.pst = 'NC' then 'North Carolina' when a.pst = 'ND' then 'North Dakota' 
+when a.pst = 'NE' then 'Nebraska' when a.pst = 'NH' then 'New Hampshire' when a.pst = 'NJ' then 'New Jersey' 
+when a.pst = 'NM' then 'New Mexico' when a.pst = 'NV' then 'Nevada' when a.pst = 'NY' then 'New York' 
+when a.pst = 'OH' then 'Ohio' when a.pst = 'OK' then 'Oklahoma' when a.pst = 'OR' then 'Oregon' 
+when a.pst = 'PA' then 'Pennsylvania' when a.pst = 'RI' then 'Rhode Island' when a.pst = 'SC' then 'South Carolina' 
+when a.pst = 'SD' then 'South Dakota' when a.pst = 'TN' then 'Tennessee' when a.pst = 'TX' then 'Texas' 
+when a.pst = 'UT' then 'Utah' when a.pst = 'VA' then 'Virginia' when a.pst = 'VT' then 'Vermont' 
+when a.pst = 'WA' then 'Washington' when a.pst = 'WI' then 'Wisconsin' when a.pst = 'WV' then 'West Virginia' 
+when a.pst = 'WY' then 'Wyoming' else '' end as pstn,
+('Claims'||':'||sstp||':'||eid||':'||coalesce((cast(efdt as varchar(10))),'')||':'||coalesce((cast(ddt as varchar(10))),
+'')||':'||pd||':'||coalesce((cast(prdt as varchar(10))),'')||':'||rxc||':'||coalesce((cast(rxfdt as varchar(10))),
+'')||':'||oc||':'||pon||':'||coalesce((cast(ofdt as varchar(10))),'')||':'||pid||':'||coalesce(pc,'')||':'||coalesce((cast(pfdt as varchar(10))),
+'')||':'||pftm||':'||rc||':'||coalesce((cast(rdt as varchar(10))),'')||':'||inpid||':'||incid||':'||tid||':'||tbid||':'||cid||':'||clid||':'||coalesce((cast(eldt as varchar(10))),
+'')||':'||acoid||':'||coalesce(pn,'')||':'||coalesce(pdn,'')||':'||rxn||':'||rn||':'||pcpid||':'||spid||':'||coalesce(spnpi,'')||':'||ptt||':'||coalesce((cast(inpfdt as varchar(10))),
+'')||':'||coalesce((cast(inpldt as varchar(10))),'')||':'||id) AS sno 
+from
+(Select distinct
+'claimline' as cltp,
+'4' as sid, 
+OBJECT_CONSTRUCT('member',m.member_ref) AS id_keys,
+clmline.CLM_LINE_NUM as clid,
+coalesce(st1.alpha_code,'') as ftst,
+case when clmhead.BENE_PTNT_STUS_CD = '00' then 'Unknown Value (but present in data)'
+when clmhead.BENE_PTNT_STUS_CD = '01' then 'Discharged to home/self care (routine charge).'
+when clmhead.BENE_PTNT_STUS_CD = '02' then 'Discharged/transferred to other short term general hospital for inpatient care.'
+when clmhead.BENE_PTNT_STUS_CD = '03' then 'Discharged/transferred to skilled nursing facility (SNF) with Medicare certification in anticipation of covered skilled care -- (For hospitals with an approved swing bed arrangement, use Code 61 - swing bed. For reporting discharges/transfers to a non-certified SNF, the hospital must use Code 04 - ICF.'
+when clmhead.BENE_PTNT_STUS_CD = '04' then 'Discharged/transferred to intermediate care facility (ICF).'
+when clmhead.BENE_PTNT_STUS_CD = '05' then 'Discharged/transferred to another type of institution for inpatient care (including distinct parts). NOTE: Effective 1/2005, psychiatric hospital or psychiatric distinct part unit of a hospital will no longer be identified by this code. New code is ''65'''
+when clmhead.BENE_PTNT_STUS_CD = '06' then 'Discharged/transferred to home care of organized home health service organization.'
+when clmhead.BENE_PTNT_STUS_CD = '07' then 'Left against medical advice or discontinued care.'
+when clmhead.BENE_PTNT_STUS_CD = '08' then 'Discharged/transferred to home under care of a home IV drug therapy provider. (discontinued effective 10/1/05)'
+when clmhead.BENE_PTNT_STUS_CD = '09' then 'Admitted as an inpatient to this hospital (effective 3/1/91). In situations where a patient is admitted before midnight of the third day following the day of an outpatient service, the outpatient services are considered inpatient.'
+when clmhead.BENE_PTNT_STUS_CD = '20' then 'Expired (did not recover - Christian Science patient).'
+when clmhead.BENE_PTNT_STUS_CD = '21' then 'Discharged/transferred to Court/Law Enforcement'
+when clmhead.BENE_PTNT_STUS_CD = '30' then 'Still patient'
+when clmhead.BENE_PTNT_STUS_CD = '40' then 'Expired at home (hospice claims only)'
+when clmhead.BENE_PTNT_STUS_CD = '41' then 'Expired in a medical facility such as hospital, SNF, ICF, or freestanding hospice. (Hospice claims only)'
+when clmhead.BENE_PTNT_STUS_CD = '42' then 'Expired - place unknown (Hospice claims only)'
+when clmhead.BENE_PTNT_STUS_CD = '43' then 'Discharged/transferred to a federal hospital (eff. 10/1/03)'
+when clmhead.BENE_PTNT_STUS_CD = '50' then 'Hospice - home (eff. 10/96)'
+when clmhead.BENE_PTNT_STUS_CD = '51' then 'Hospice - medical facility (eff. 10/96)'
+when clmhead.BENE_PTNT_STUS_CD = '61' then 'Discharged/transferred within this institution to a hospital-based Medicare approved swing bed (eff. 9/01)'
+when clmhead.BENE_PTNT_STUS_CD = '62' then 'Discharged/transferred to an inpatient rehabilitation facility including distinct parts units of a hospital. (eff. 1/2002)'
+when clmhead.BENE_PTNT_STUS_CD = '63' then 'Discharged/transferred to a long term care hospitals. (eff. 1/2002)'
+when clmhead.BENE_PTNT_STUS_CD = '64' then 'Discharged/transferred to a nursing facility certified under Medicaid but not under Medicare (eff. 10/2002)'
+when clmhead.BENE_PTNT_STUS_CD = '65' then 'Discharged/Transferred to a psychiatric hospital or psychiatric distinct unit of a hospital (these types of hospitals were pulled from patient/discharge status code ''05'' and given their own code). (eff. 1/2005).'
+when clmhead.BENE_PTNT_STUS_CD = '66' then 'Discharged/transferred to a Critical Access Hospital (CAH) (eff. 1/1/06)'
+when clmhead.BENE_PTNT_STUS_CD = '69' then 'Discharged/transferred to a designated disaster alternative care site (eff. 10/2013)'
+when clmhead.BENE_PTNT_STUS_CD = '70' then 'Discharged/transferred to another type of health care institution not defined elsewhere in code list.'
+when clmhead.BENE_PTNT_STUS_CD = '71' then 'Discharged/transferred/referred to another institution for outpatient services as specified by the discharge plan of care (eff. 9/01) (discontinued effective 10/1/05)'
+when clmhead.BENE_PTNT_STUS_CD = '72' then 'Discharged/transferred/referred to this institution for outpatient services as specified by the discharge plan of care (eff. 9/01) (discontinued effective 10/1/05)'
+when clmhead.BENE_PTNT_STUS_CD = '81' then 'Discharged to home or self-care with a planned acute care hospital readmission (eff. 10/2013)'
+when clmhead.BENE_PTNT_STUS_CD = '82' then 'Discharged/transferred to a short term general hospital for inpatient care with a planned acute care hospital inpatient readmission (eff. 10/2013)'
+when clmhead.BENE_PTNT_STUS_CD = '83' then 'Discharged/transferred to a skilled nursing facility (SNF) with Medicare certification with a planned acute care hospital inpatient readmission (eff. 10/2013)'
+when clmhead.BENE_PTNT_STUS_CD = '84' then 'Discharged/transferred to a facility that provides custodial or supportive care with a planned acute care hospital inpatient readmission (eff. 10/2013)'
+when clmhead.BENE_PTNT_STUS_CD = '85' then 'Discharged/transferred to a designated cancer center or children''s hospital with a planned acute care hospital inpatient readmission (eff. 10/2013)'
+when clmhead.BENE_PTNT_STUS_CD = '86' then 'Discharged/transferred to home under care of organized home health service organization with a planned acute care hospital inpatient readmission (eff. 10/2013)'
+when clmhead.BENE_PTNT_STUS_CD = '87' then 'Discharged/transferred to court/law enforcement with a planned acute care hospital inpatient readmission (eff. 10/2013)'
+when clmhead.BENE_PTNT_STUS_CD = '88' then 'Discharged/transferred to a federal health care facility with a planned acute care hospital inpatient readmission (eff. 10/2013)'
+when clmhead.BENE_PTNT_STUS_CD = '89' then 'Discharged/transferred to a hospital-based Medicare approved swing bed with a planned acute care hospital inpatient readmission (eff. 10/2013)'
+when clmhead.BENE_PTNT_STUS_CD = '90' then 'Discharged/transferred to an inpatient rehabilitation facility (IRF) including rehabilitation distinct part units of a hospital with a planned acute care hospital inpatient readmission (eff. 10/2013)'
+when clmhead.BENE_PTNT_STUS_CD = '91' then 'Discharged/transferred to a Medicare certified long term care hospital (LTCH) with a planned acute care hospital inpatient readmission (eff. 10/2103)'
+when clmhead.BENE_PTNT_STUS_CD = '92' then 'Discharged/transferred to nursing facility certified under Medicaid but not certified under Medicare with a planned acute care hospital inpatient readmission (eff. 10/2013)'
+when clmhead.BENE_PTNT_STUS_CD = '93' then 'Discharged/transferred to a psychiatric hospital/distinct part unit of a hospital with a planned acute care hospital inpatient readmission (eff. 10/2013)'
+when clmhead.BENE_PTNT_STUS_CD = '94' then 'Discharged/transferred to a critical access hospital (CAH) with a planned acute care hospital inpatient readmission (eff. 10/2013)'
+when clmhead.BENE_PTNT_STUS_CD = '95' then 'Discharged/transferred to another type of health care institution not defined elsewhere in this code list with a planned acute care hospital inpatient readmission (eff. 10/2013)' else '' end as drdn,
+case 
+when st1.alpha_code = 'AK' then 'Alaska' when st1.alpha_code = 'AL' then 'Alabama' when st1.alpha_code = 'AR' then 'Arkansas' 
+when st1.alpha_code = 'AZ' then 'Arizona' when st1.alpha_code = 'CA' then 'California' when st1.alpha_code = 'CO' then 'Colorado' 
+when st1.alpha_code = 'CT' then 'Connecticut' when st1.alpha_code = 'DC' then 'District of Columbia' when st1.alpha_code = 'DE' then 'Delaware' 
+when st1.alpha_code = 'FL' then 'Florida' when st1.alpha_code = 'GA' then 'Georgia' when st1.alpha_code = 'HI' then 'Hawaii' 
+when st1.alpha_code = 'IA' then 'Iowa' when st1.alpha_code = 'ID' then 'Idaho' when st1.alpha_code = 'IL' then 'Illinois' 
+when st1.alpha_code = 'IN' then 'Indiana' when st1.alpha_code = 'KS' then 'Kansas' when st1.alpha_code = 'KY' then 'Kentucky' 
+when st1.alpha_code = 'LA' then 'Louisiana' when st1.alpha_code = 'MA' then 'Massachusetts' when st1.alpha_code = 'MD' then 'Maryland' 
+when st1.alpha_code = 'ME' then 'Maine' when st1.alpha_code = 'MI' then 'Michigan' when st1.alpha_code = 'MN' then 'Minnesota' 
+when st1.alpha_code = 'MO' then 'Missouri' when st1.alpha_code = 'MS' then 'Mississippi' when st1.alpha_code = 'MT' then 'Montana' 
+when st1.alpha_code = 'NC' then 'North Carolina' when st1.alpha_code = 'ND' then 'North Dakota' when st1.alpha_code = 'NE' then 'Nebraska' 
+when st1.alpha_code = 'NH' then 'New Hampshire' when st1.alpha_code = 'NJ' then 'New Jersey' when st1.alpha_code = 'NM' then 'New Mexico' 
+when st1.alpha_code = 'NV' then 'Nevada' when st1.alpha_code = 'NY' then 'New York' when st1.alpha_code = 'OH' then 'Ohio' 
+when st1.alpha_code = 'OK' then 'Oklahoma' when st1.alpha_code = 'OR' then 'Oregon' when st1.alpha_code = 'PA' then 'Pennsylvania' 
+when st1.alpha_code = 'RI' then 'Rhode Island' when st1.alpha_code = 'SC' then 'South Carolina' when st1.alpha_code = 'SD' then 'South Dakota' 
+when st1.alpha_code = 'TN' then 'Tennessee' when st1.alpha_code = 'TX' then 'Texas' when st1.alpha_code = 'UT' then 'Utah' 
+when st1.alpha_code = 'VA' then 'Virginia' when st1.alpha_code = 'VT' then 'Vermont' when st1.alpha_code = 'WA' then 'Washington' 
+when st1.alpha_code = 'WI' then 'Wisconsin' when st1.alpha_code = 'WV' then 'West Virginia' when st1.alpha_code = 'WY' then 'Wyoming' 
+when st1.alpha_code = 'GU' then 'Guam' when st1.alpha_code = 'VI' then 'Virgin Islands of the U.S.' when st1.alpha_code = 'PR' then 'Puerto Rico' 
+else '' end as ftstn,
+CASE WHEN clmline.CLM_FROM_DT NOT IN ('','1000-01-01','9999-12-31')  THEN(TO_DATE(clmline.CLM_FROM_DT,'YYYY-MM-DD')) END AS  efdt,
+CASE WHEN clmline.CLM_THRU_DT  NOT IN ('','1000-01-01','9999-12-31')  THEN (TO_DATE(clmline.CLM_THRU_DT ,'YYYY-MM-DD')) END AS eldt,
+CASE WHEN clmline.CLM_LINE_FROM_DT NOT IN ('','1000-01-01','9999-12-31') THEN (TO_DATE(clmline.CLM_LINE_FROM_DT,'YYYY-MM-DD')) END as clsfdt,
+CASE WHEN clmline.CLM_LINE_THRU_DT NOT IN ('','1000-01-01','9999-12-31') THEN (TO_DATE(clmline.CLM_LINE_THRU_DT,'YYYY-MM-DD')) END AS clsldt,
+case when clmline.CLM_LINE_PROD_REV_CTR_CD in ('~','') then '' else clmline.CLM_LINE_PROD_REV_CTR_CD end as rcc,
+case when clmline.CLM_LINE_PROD_REV_CTR_CD in ('~','0022') THEN '' else coalesce(clmline.CLM_LINE_HCPCS_CD,'') end as pc,
+clmline.CLM_LINE_SRVC_UNIT_QTY as uqt,
+cast(clmline.CLM_LINE_CVRD_PD_AMT as numeric(18,2)) as catp,
+case when clmline.HCPCS_1_MDFR_CD in ('~','') then '' else coalesce(clmline.HCPCS_1_MDFR_CD,'') end as pm1,
+case when clmline.HCPCS_2_MDFR_CD in ('~','') then '' else coalesce(clmline.HCPCS_2_MDFR_CD,'') end as pm2,
+case when clmline.HCPCS_3_MDFR_CD in ('~','') then '' else coalesce(clmline.HCPCS_3_MDFR_CD,'') end as pm3,
+case when clmline.HCPCS_4_MDFR_CD in ('~','') then '' else coalesce(clmline.HCPCS_4_MDFR_CD,'') end as pm4,
+case when clmline.HCPCS_5_MDFR_CD in ('~','') then '' else coalesce(clmline.HCPCS_5_MDFR_CD,'') end as pm5,
+case when clmline.clm_rev_apc_hipps_cd not in ('','~') then coalesce(clmline.clm_rev_apc_hipps_cd,'') else '' end as ahc,
+trim(clmhead.CUR_CLM_UNIQ_ID) as cid,
+trim(clmhead.bene_mbi_id) as id,
+case when clmhead.PRVDR_OSCAR_NUM in ('~','','null') then '' else coalesce(clmhead.PRVDR_OSCAR_NUM,'') end as ftccn,
+clmhead.CLM_TYPE_CD as cftc,
+cast(null as date) AS  ddt,
+CASE WHEN clmline.CLM_FROM_DT NOT IN ('','1000-01-01','9999-12-31')  THEN(TO_DATE(clmline.CLM_FROM_DT,'YYYY-MM-DD')) END AS  pfdt,
+(clmhead.CLM_BILL_FAC_TYPE_CD||clmhead.CLM_BILL_CLSFCTN_CD||clmhead.CLM_BILL_FREQ_CD) as bt,
+coalesce(clmhead.PRNCPL_DGNS_CD,'') as pd,
+case when clmhead.ADMTG_DGNS_CD in ('~','') then '' else coalesce(clmhead.ADMTG_DGNS_CD,'') end as ad,
+CASE WHEN clmhead.CLM_MDCR_NPMT_RSN_CD != '' then ('i'||clmhead.clm_mdcr_npmt_rsn_cd) else '' end as cmnpr,
+cast(clmhead.CLM_PMT_AMT as numeric (18,2)) as pih,
+coalesce(clmhead.CLM_NCH_PRMRY_PYR_CD,'') as cnppc,
+coalesce(clmhead.BENE_PTNT_STUS_CD,'') as drdc,
+coalesce(clmhead.DGNS_DRG_CD,'') as drg,
+replace(clmhead.FAC_PRVDR_NPI_NUM,'~','') as ftnpi,
+replace(clmhead.OPRTG_PRVDR_NPI_NUM,'~','') as atpnpi,
+replace(clmhead.ATNDG_PRVDR_NPI_NUM,'~','') as spnpi,
+replace(clmhead.OTHR_PRVDR_NPI_NUM,'~','') as otpnpi,
+translate(clmhead.CLM_ADJSMT_TYPE_CD,'012','OCA') as adjs,
+case when clmhead.CLM_ADJSMT_TYPE_CD = '0' then 'Original' when clmhead.CLM_ADJSMT_TYPE_CD = '2' then 'Adjusted' when clmhead.CLM_ADJSMT_TYPE_CD =  '1' then 'Cancelled' else '' end as adjsn,
+CASE WHEN clmhead.CLM_EFCTV_DT NOT IN ('','1000-01-01','9999-12-31')  THEN (TO_DATE(clmhead.CLM_EFCTV_DT,'YYYY-MM-DD')) END as cpdt,
+case when clmhead.BENE_EQTBL_BIC_HICN_NUM in ('~','')  then '' else coalesce(clmhead.BENE_EQTBL_BIC_HICN_NUM,'') end as ptsid,
+cast((CASE 
+WHEN clmhead.clm_type_cd = '40' then replace(trim(clmhead.CLM_OP_SRVC_TYPE_CD),'~','') 
+when clmhead.clm_type_cd not in ('40') Then replace(trim(clmhead.CLM_ADMSN_TYPE_CD),'~','') else '' end ) as varchar(100))AS atc,
+case when clmhead.CLM_ADMSN_SRC_CD in ('~','') then '' else clmhead.CLM_ADMSN_SRC_CD end as rsc ,
+case when clmhead.CLM_QUERY_CD in ('~','','null') then '' else clmhead.CLM_QUERY_CD end as tt,
+case when clmhead.CLM_QUERY_CD = '0' then 'Credit adjustment'  when clmhead.CLM_QUERY_CD = '1' then 'Interim bill' when clmhead.CLM_QUERY_CD = '2' then 'HHA benefits exhausted' when clmhead.CLM_QUERY_CD = '3' then 'Final bill' when clmhead.CLM_QUERY_CD = '4' then 'Discharge notice' when clmhead.CLM_QUERY_CD = '5' then 'Debit adjustment' else '' end as ttn,
+case when clmhead.PRNCPL_DGNS_CD in ('','~') then ''
+when clmhead.DGNS_PRCDR_ICD_IND='9' then 'ICD-9' when clmhead.DGNS_PRCDR_ICD_IND='0' then 'ICD-10' else ''end as pdcs,
+case when trim(clmline.CLM_LINE_PROD_REV_CTR_CD) in ('~','null','NULL','0001') then cast(null as decimal(18,2)) else
+CAST (clmhead.clm_mdcr_instnl_tot_chrg_amt AS decimal(18,2)) end as tcamt,
+case when clmhead.clm_type_cd !='60' then cast (null as decimal(18,2)) else 
+CAST (clmhead.clm_mdcr_ip_pps_cptl_ime_amt AS decimal(18,2)) end as imeamt ,
+case when clmhead.clm_type_cd !='60' then cast (null as decimal(18,2)) else 
+CAST (clmhead.clm_oprtnl_ime_amt AS decimal(18,2)) end as caia,
+case when clmhead.clm_type_cd !='60' then cast (null as decimal(18,2)) else 
+CAST (clmhead.clm_mdcr_ip_pps_dsprprtnt_amt AS decimal(18,2)) end as cdpa,
+case when clmhead.clm_type_cd not in ('10','20','30','40','50','60')
+then cast (null as decimal(18,2)) else CAST (clmhead.clm_hipps_uncompd_care_amt AS decimal(18,2)) end as cuca,
+case when clmhead.clm_type_cd !='60' then cast (null as decimal(18,2)) else 
+CAST (clmhead.clm_oprtnl_dsprprtnt_amt AS decimal(18,2)) end as cdsa,
+case when trim(geo_usps_state_cd) in ('~','','null') and trim(bene_fips_state_cd) not in ('~','','null') 
+then 
+(case when trim(bene_fips_state_cd) in ('2','02') then 'AK'
+when trim(bene_fips_state_cd) in ('1','01') then 'AL'
+when trim(bene_fips_state_cd) in ('5','05') then 'AR'
+when trim(bene_fips_state_cd) ='60' then 'AS'
+when trim(bene_fips_state_cd) in ('04','4') then 'AZ'
+when trim(bene_fips_state_cd) in ('6','06') then 'CA'
+when trim(bene_fips_state_cd) in ('8','08') then 'CO'
+when trim(bene_fips_state_cd) in ('9','09') then 'CT'
+when trim(bene_fips_state_cd) ='11' then 'DC'
+when trim(bene_fips_state_cd) ='10' then 'DE'
+when trim(bene_fips_state_cd) ='12' then 'FL'
+when trim(bene_fips_state_cd) ='64' then 'FM'
+when trim(bene_fips_state_cd) ='13' then 'GA'
+when trim(bene_fips_state_cd) ='66' then 'GU'
+when trim(bene_fips_state_cd) ='15' then 'HI'
+when trim(bene_fips_state_cd) ='19' then 'IA'
+when trim(bene_fips_state_cd) ='16' then 'ID'
+when trim(bene_fips_state_cd) ='17' then 'IL'
+when trim(bene_fips_state_cd) ='18' then 'IN'
+when trim(bene_fips_state_cd) ='20' then 'KS'
+when trim(bene_fips_state_cd) ='21' then 'KY'
+when trim(bene_fips_state_cd) ='22' then 'LA'
+when trim(bene_fips_state_cd) ='25' then 'MA'
+when trim(bene_fips_state_cd) ='24' then 'MD'
+when trim(bene_fips_state_cd) ='23' then 'ME'
+when trim(bene_fips_state_cd) ='68' then 'MH'
+when trim(bene_fips_state_cd) ='26' then 'MI'
+when trim(bene_fips_state_cd) ='27' then 'MN'
+when trim(bene_fips_state_cd) ='29' then 'MO'
+when trim(bene_fips_state_cd) ='69' then 'MP'
+when trim(bene_fips_state_cd) ='28' then 'MS'
+when trim(bene_fips_state_cd) ='30' then 'MT'
+when trim(bene_fips_state_cd) ='37' then 'NC'
+when trim(bene_fips_state_cd) ='38' then 'ND'
+when trim(bene_fips_state_cd) ='31' then 'NE'
+when trim(bene_fips_state_cd) ='33' then 'NH'
+when trim(bene_fips_state_cd) ='34' then 'NJ'
+when trim(bene_fips_state_cd) ='35' then 'NM'
+when trim(bene_fips_state_cd) ='32' then 'NV'
+when trim(bene_fips_state_cd) ='36' then 'NY'
+when trim(bene_fips_state_cd) ='39' then 'OH'
+when trim(bene_fips_state_cd) ='40' then 'OK'
+when trim(bene_fips_state_cd) ='41' then 'OR'
+when trim(bene_fips_state_cd) ='42' then 'PA'
+when trim(bene_fips_state_cd) ='72' then 'PR'
+when trim(bene_fips_state_cd) ='70' then 'PW'
+when trim(bene_fips_state_cd) ='44' then 'RI'
+when trim(bene_fips_state_cd) ='45' then 'SC'
+when trim(bene_fips_state_cd) ='46' then 'SD'
+when trim(bene_fips_state_cd) ='47' then 'TN'
+when trim(bene_fips_state_cd) ='48' then 'TX'
+when trim(bene_fips_state_cd) ='74' then 'UM'
+when trim(bene_fips_state_cd) ='49' then 'UT'
+when trim(bene_fips_state_cd) ='51' then 'VA'
+when trim(bene_fips_state_cd) ='78' then 'VI'
+when trim(bene_fips_state_cd) ='50' then 'VT'
+when trim(bene_fips_state_cd) ='53' then 'WA'
+when trim(bene_fips_state_cd) ='55' then 'WI'
+when trim(bene_fips_state_cd) ='54' then 'WV'
+when trim(bene_fips_state_cd) ='56' then 'WY'
+else '' end)
+when trim(geo_usps_state_cd) not in ('~','','null') then geo_usps_state_cd else '' end as pst,
+coalesce(demo.BENE_FIPS_CNTY_CD,'') as pct,
+case when demo.GEO_ZIP_PLC_NAME in ('~','') then '' else coalesce(demo.GEO_ZIP_PLC_NAME,'') end as pci,
+coalesce(demo.bene_line_1_adr,'') AS psa1,
+regexp_replace(regexp_replace( trim(coalesce(demo.bene_line_2_adr,'')||', '||coalesce(demo.bene_line_3_adr,'')||', '||coalesce(demo.bene_line_4_adr,'')||', '||coalesce(demo.bene_line_5_adr,'')||', '||coalesce(demo.bene_line_6_adr,'')),'( ,)+$',''),',$','') as psa2,
+case when demo.bene_zip_cd not in ('~','') and demo.geo_zip5_cd in ('','~') and demo.geo_zip4_cd in ('','~') then demo.bene_zip_cd
+when demo.bene_zip_cd = demo.geo_zip5_cd and demo.geo_zip4_cd in ('','~') then demo.bene_zip_cd
+when demo.bene_zip_cd in ('~','') and demo.geo_zip5_cd not in ('','~') and demo.geo_zip4_cd in ('','~') then demo.geo_zip5_cd
+when demo.bene_zip_cd in ('','~') and demo.geo_zip5_cd not in ('','~') and demo.geo_zip4_cd not in ('','~') then demo.geo_zip5_cd||'-'||demo.geo_zip4_cd
+when demo.bene_zip_cd = demo.geo_zip5_cd and demo.geo_zip4_cd not in ('','~') then demo.bene_zip_cd||'-'||demo.geo_zip4_cd
+else demo.bene_zip_cd end as pz,
+CASE WHEN demo.BENE_DOB NOT IN ('','1000-01-01','9999-12-31') THEN (TO_DATE(demo.BENE_DOB,'YYYY-MM-DD')) END as dob,
+CASE WHEN demo.BENE_PART_A_ENRLMT_BGN_DT NOT IN ('','1000-01-01','9999-12-31') THEN (TO_DATE(demo.BENE_PART_A_ENRLMT_BGN_DT,'YYYY-MM-DD'))END as bedpa,
+CASE WHEN demo.BENE_PART_B_ENRLMT_BGN_DT NOT IN ('','1000-01-01','9999-12-31') THEN (TO_DATE(demo.BENE_PART_B_ENRLMT_BGN_DT,'YYYY-MM-DD'))END as bedpb,
+case when demo.BENE_SEX_CD = '0' then 'U' when demo.BENE_SEX_CD = '1' then 'M' when demo.BENE_SEX_CD = '2' then 'F' else 'U' end as gn,
+case when demo.BENE_RACE_CD in ('~','') then '' else demo.BENE_RACE_CD end as race,
+case when demo.BENE_RACE_CD = '0' then 'Unknown' when demo.BENE_RACE_CD = '1' then 'White' when demo.BENE_RACE_CD = '2' then 'Black' when demo.BENE_RACE_CD = '3' then 'Other' when demo.BENE_RACE_CD = '4' then 'Asian' when demo.BENE_RACE_CD = '5' then 'Hispanic' when demo.BENE_RACE_CD = '6' then 'North American Native' else '' end AS racen,
+demo.BENE_MDCR_STUS_CD as bfmdst,
+demo.BENE_DUAL_STUS_CD as bfsdcd,
+CASE WHEN demo.BENE_DEATH_DT NOT IN ('','1000-01-01','9999-12-31')  THEN
+(TO_DATE(demo.BENE_DEATH_DT,'YYYY-MM-DD')) END as dod,
+CASE WHEN demo.BENE_RNG_BGN_DT NOT IN ('','1000-01-01','9999-12-31')  THEN
+(TO_DATE(demo.BENE_RNG_BGN_DT,'YYYY-MM-DD'))END as hpstdt,
+CASE WHEN demo.BENE_RNG_END_DT NOT IN ('','1000-01-01','9999-12-31')  THEN
+(TO_DATE(demo.BENE_RNG_END_DT,'YYYY-MM-DD')) END AS hpenddt,
+coalesce(trim(demo.BENE_1ST_NAME),'') as fn,
+coalesce(trim(demo.BENE_MIDL_NAME),'') as mn,
+coalesce(trim(demo.BENE_LAST_NAME),'') as ln,
+coalesce(trim(demo.BENE_ORGNL_ENTLMT_RSN_CD),'') as orec,
+coalesce(trim(demo.BENE_ENTLMT_BUYIN_IND),'') as byind,
+CASE WHEN demo.BENE_DEATH_DT NOT IN ('','1000-01-01','9999-12-31')  THEN 'Y' else 'N' END as df,
+current_timestamp() as ingdt,
+clmline.pipeline_id as pipid,          
+date_trunc('month',to_date(REPLACE(regexp_substr(clmline.sfn,'D\\d+'),'D',''),'YYMMDD')) as rcdt,
+COALESCE(demo.BENE_HIC_NUM,'') as pthcno,
+'CCLF2' as sfn,
+'Claims' AS st,                                            -- project specific
+'MSSP' AS incn,                                             -- project specific
+'MBI' as idt,
+'Institutional' as cltc,
+case when (clmline.CLM_LINE_PROD_REV_CTR_CD in ('~','0022') or  clmline.CLM_LINE_HCPCS_CD in ('~','') or clmline.CLM_LINE_HCPCS_CD is null)  then '' else 'HCPCS' end as pcs,
+'MSSP' AS sstp,                  -- project specific
+'1' AS inpid,                -- project specific
+'MSSP BASIC LEVEL B' AS inpn	,			   -- project SPECIFIC
+'' as inptp,             --change the value as per config
+'1' AS acoid,                         -- project specific
+'BAPTIST HEALTH' AS acon,                        -- project specific
+'4' AS incid ,                  -- project specific 
+'' as pcpid,
+'' as tid,
+'' as tbid,
+coalesce(pdn_join.cdscl,'') as pdn,
+'' as eid,
+'' as ptt,
+'' as rxn,
+CAST(NULL AS DATE) AS prdt,
+'' as rxc,
+CAST(NULL AS DATE) AS rxfdt,
+'' as pid,
+coalesce(pn_join.cdscl,'') as pn,
+'' as pftm,
+'' as spid,
+'' as oc,
+'' as pon,
+'' as rc,
+'' as rn,
+CAST(NULL AS DATE) AS inpfdt,
+CAST(NULL AS DATE) AS inpldt,
+CAST(NULL AS DATE) AS rdt,
+CAST(NULL AS DATE) AS ofdt,
+coalesce(ftnp.name,'') as ftn,
+coalesce(ftnp.ptxcd,'') as ftspcd,
+coalesce(ftnp.psn,'') as ftsp,
+coalesce(atnp.name,'') as atpn,
+coalesce(atnp.ptxcd,'') as atpsc,
+coalesce(atnp.psn,'') as atps,
+coalesce(spnp.name,'') as spn,
+coalesce(spnp.ptxcd,'') as spsc,
+coalesce(spnp.psn,'') as sps,
+coalesce(otnp.name,'') as otpn,
+coalesce(otnp.ptxcd,'') as otpsc,
+coalesce(otnp.psn,'') as otps
+from l1.BAPTIST_MSSP_CCLF2 clmline
+inner join l1.BAPTIST_MSSP_CCLF1  clmhead on clmline.CUR_CLM_UNIQ_ID = clmhead.CUR_CLM_UNIQ_ID and clmline.bene_mbi_id = clmhead.bene_mbi_id --and substring(clmline.sfn,'D.{6}')=substring(clmhead.sfn,'D.{6}')
+inner join l1.BAPTIST_MSSP_CCLF8  demo on clmline.bene_mbi_id = demo.bene_mbi_id --and substring(clmline.sfn,'D.{6}')=substring(demo.sfn,'D.{6}')
+left join l2."MEMBER" m on demo.source_id =m.source_id and regexp_replace(m.local_member_id,'-BHSF-MSSP') =demo.bene_mbi_id 
+and regexp_substr(m.SOURCE_FILE_NAME,'D\\d+')=regexp_substr(demo.SFN,'D\\d+') AND m.aco_id = demo.aco_id
+LEFT JOIN l1.state_name st1
+ON clmhead.PRVDR_FAC_FIPS_ST_CD = st1.numeric_code
+left join l2.pd_npi ftnp on clmhead.FAC_PRVDR_NPI_NUM = ftnp.npi
+left join l2.pd_npi atnp on clmhead.OPRTG_PRVDR_NPI_NUM = atnp.npi
+left join l2.pd_npi spnp on clmhead.ATNDG_PRVDR_NPI_NUM = spnp.npi
+left join l2.pd_npi otnp on clmhead.OTHR_PRVDR_NPI_NUM = otnp.npi
+left join (select distinct case when csys = 'ICD-10' then '0' when csys = 'ICD-9' then '9' else '' end as coding_join,cval,cdscl from
+l2.pd_ontology pdo where dtp='diagnosis') pdn_join on pdn_join.cval = clmhead.PRNCPL_DGNS_CD and pdn_join.coding_join = clmhead.DGNS_PRCDR_ICD_IND
+left join (select distinct csys,cval,cdscl from l2.pd_ontology pdo where dtp='procedure' and csys='HCPCS') pn_join on
+pn_join.cval = clmline.CLM_LINE_HCPCS_CD) a

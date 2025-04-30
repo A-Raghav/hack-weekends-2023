@@ -1,0 +1,186 @@
+source_columns,destination_column,transformation,additional_remarks,ground_truth
+BENE_FIPS_STATE_CD,pst,"Map
+AR to Arkansas
+CT to Connecticut
+DC to District of Columbia
+FL to Florida
+GA to Georgia
+HI to Hawaii
+IA to Iowa
+KS to Kansas
+LA to Louisiana
+MA to Massachusetts
+NY to New York
+OR to Oregon
+PA to Pennsylvania
+RI to Rhode Island
+SC to South Carolina
+TN to Tennessee
+UT to Utah
+VA to Virginia
+VT to Vermont
+WA to Washington",,"case when BENE_FIPS_STATE_CD= 'AR' then 'Arkansas'
+when BENE_FIPS_STATE_CD = 'CT' then 'Connecticut'
+when BENE_FIPS_STATE_CD = 'DC' then 'District of Columbia'
+when BENE_FIPS_STATE_CD = 'FL' then 'Florida'
+when BENE_FIPS_STATE_CD = 'GA' then 'Georgia'
+when BENE_FIPS_STATE_CD = 'HI' then 'Hawaii'
+when BENE_FIPS_STATE_CD = 'IA' then 'Iowa'
+when BENE_FIPS_STATE_CD = 'KS' then 'Kansas'
+when BENE_FIPS_STATE_CD = 'LA' then 'Louisiana'
+when BENE_FIPS_STATE_CD = 'MA' then 'Massachusetts'
+when BENE_FIPS_STATE_CD  = 'NY' then 'New York'
+when BENE_FIPS_STATE_CD  = 'OR' then 'Oregon'
+when BENE_FIPS_STATE_CD  = 'PA' then 'Pennsylvania'
+when BENE_FIPS_STATE_CD  = 'RI' then 'Rhode Island'
+when BENE_FIPS_STATE_CD  = 'SC' then 'South Carolina'
+when BENE_FIPS_STATE_CD  = 'TN' then 'Tennessee'
+when BENE_FIPS_STATE_CD  = 'UT' then 'Utah'
+when BENE_FIPS_STATE_CD  = 'VA' then 'Virginia'
+when BENE_FIPS_STATE_CD  = 'VT' then 'Vermont'
+when BENE_FIPS_STATE_CD  = 'WA' then 'Washington'
+end as pst"
+CLM_LINE_NUM,clid,,,CLM_LINE_NUM as clid
+ALPHA_CODE,ftst,Coalesce with '' to remove any NULL values,,"coalesce(ALPHA_CODE,'') as ftst"
+BENE_PTNT_STUS_CD,drdn,"Mapper to be put here -
+02=Discharged/transferred to other short term general hospital for inpatient care.
+04=Discharged/transferred to intermediate care facility (ICF).
+07=Left against medical advice or discontinued care.
+30=Still patient
+63=Discharged/transferred to a long term care hospitals. (eff. 1/2002)",,"case when BENE_PTNT_STUS_CD = '02' then 'Discharged/transferred to other short term general hospital for inpatient care.'
+when BENE_PTNT_STUS_CD = '04' then 'Discharged/transferred to intermediate care facility (ICF).'
+when BENE_PTNT_STUS_CD = '07' then 'Left against medical advice or discontinued care.'
+when BENE_PTNT_STUS_CD = '30' then 'Still patient'
+when BENE_PTNT_STUS_CD = '63' then 'Discharged/transferred to a long term care hospitals. (eff. 1/2002)' end as drdn"
+CLM_FROM_DT,efdt,"Date should not be blank, or '1000-01-01' or '9999-12-31. Convert values to date in YYYY-MM-DD format",,"CASE WHEN CLM_FROM_DT NOT IN ('','1000-01-01','9999-12-31') THEN(TO_DATE(CLM_FROM_DT,'YYYY-MM-DD')) END AS  efdt
+"
+CLM_THRU_DT,eldt,Convert values to date in YYYY-MM-DD format if value is not '' or '1000-01-01' or '9999-12-31,,"CASE WHEN CLM_THRU_DT NOT IN ('','1000-01-01','9999-12-31') THEN (TO_DATE(CLM_THRU_DT,'YYYY-MM-DD')) END AS  eldt
+"
+CLM_LINE_FROM_DT,clsfdt,"Convert to date (YYYY-MM-DD). Date must not be in ('','1000-01-01','9999-12-31')",,"CASE WHEN CLM_FROM_DT NOT IN ('','1000-01-01','9999-12-31') THEN (TO_DATE(CLM_FROM_DT,'YYYY-MM-DD')) END AS  clsfdt
+"
+CLM_LINE_THRU_DT,clsldt,"Convert to date (YYYY-MM-DD). Date must not be in ('','1000-01-01','9999-12-31')",,"CASE WHEN CLM_LINE_THRU_DTNOT IN ('','1000-01-01','9999-12-31') THEN (TO_DATE(CLM_LINE_THRU_DT,'YYYY-MM-DD')) END AS  clsldt"
+CLM_LINE_PROD_REV_CTR_CD,rcc,"Return an empty string if value is blank or '~', otherwise return the value of the column",,"case when CLM_LINE_PROD_REV_CTR_CD in ('~','') then '' else CLM_LINE_PROD_REV_CTR_CD end as rcc"
+"CLM_LINE_PROD_REV_CTR_CD, CLM_LINE_HCPCS_CD",pc,"Return an empty string if value in CLM_LINE_PROD_REV_CTR_CD is either '~' or '0022', otherwise coalesce CLM_LINE_HCPCS_CD and ''",,"case when CLM_LINE_PROD_REV_CTR_CD in ('~','0022') THEN '' else coalesce(CLM_LINE_HCPCS_CD,'') end as pc"
+CLM_LINE_SRVC_UNIT_QTY,uqt,No transformation,,CLM_LINE_SRVC_UNIT_QTY as uqt
+CLM_LINE_CVRD_PD_AMT,catp,Typecast to numeric data with precision=18 and scale=2,,"cast (CLM_LINE_CVRD_PD_AMT as numeric(18,2)) as catp"
+HCPCS_1_MDFR_CD,pm1,If value is not '~' then remove Null value else return empty string,,"case when HCPCS_1_MDFR_CD in ('~','') then '' else coalesce(HCPCS_1_MDFR_CD,'') end as pm1"
+HCPCS_2_MDFR_CD,pm2,If value is '~` then '' else remove null value,,"case when HCPCS_2_MDFR_CD in ('~','') then '' else coalesce(HCPCS_2_MDFR_CD,'') end as pm2"
+HCPCS_3_MDFR_CD,pm3,Remove null if value is not '~' else return '',,"case when HCPCS_3_MDFR_CD in ('~','') then '' else coalesce(HCPCS_3_MDFR_CD,'') end as pm3"
+HCPCS_4_MDFR_CD,pm4,Return '' if value is '~' else remove null if exists,,"case when HCPCS_4_MDFR_CD in ('~','') then '' else coalesce(HCPCS_4_MDFR_CD,'') end as pm4"
+HCPCS_5_MDFR_CD,pm5,Return empty string if value is '~' else coalesce with '',,"case when HCPCS_5_MDFR_CD in ('~','') then '' else coalesce(HCPCS_5_MDFR_CD,'') end as pm5"
+CLM_REV_APC_HIPPS_CD,ahc,Return empty string if value is '~' else coalesce with '',,"case when CLM_REV_APC_HIPPS_CDnot in ('','~') then coalesce(CLM_REV_APC_HIPPS_CD,'') else '' end as ahc"
+CUR_CLM_UNIQ_ID,cid,Trim any trailing or leading whitespaces,,trim(CUR_CLM_UNIQ_ID) as cid
+BENE_MBI_ID,id,Remove trailing or leading whitespaces,,trim(bene_mbi_id) as id
+PRVDR_OSCAR_NUM,ftccn,"Return an empty string if value is either '', '~' or 'null', otherwise coalesce with ''",,"case when PRVDR_OSCAR_NUM in ('~','','null') then '' else coalesce(PRVDR_OSCAR_NUM,'') end as ftccn"
+CLM_TYPE_CD,cftc,,,CLM_TYPE_CD as cftc
+CLM_FROM_DT,pfdt,Convert all values to date in YYYY-MM-DD format which are not '' or '1000-01-01' or '9999-12-31,,"CASE WHEN CLM_FROM_DT NOT IN ('','1000-01-01','9999-12-31')  THEN(TO_DATE(CLM_FROM_DT,'YYYY-MM-DD')) END AS  pfdt"
+"CLM_BILL_FAC_TYPE_CD, CLM_BILL_CLSFCTN_CD, CLM_BILL_FREQ_CD",bt,Concatenate the columns,,(CLM_BILL_FAC_TYPE_CD||CLM_BILL_CLSFCTN_CD||CLM_BILL_FREQ_CD) as bt
+PRNCPL_DGNS_CD,pd,Coalesce with blank string,,"coalesce(PRNCPL_DGNS_CD,'') as pd"
+ADMTG_DGNS_CD,ad,"Return an empty string if value is either '~' or blank, otherwise coalesce with ''",,"case when ADMTG_DGNS_CD in ('~','') then '' else coalesce(ADMTG_DGNS_CD,'') end as ad"
+CLM_MDCR_NPMT_RSN_CD,cmnpr,Concatenate all non-blank values with 'i',,CASE WHEN CLM_MDCR_NPMT_RSN_CD != '' then ('i'||clm_mdcr_npmt_rsn_cd) else '' end as cmnpr
+CLM_PMT_AMT,pih,Typecast to numeric data with precision of 18 and scale of 2,,"cast(CLM_PMT_AMT as numeric (18,2)) as pih"
+CLM_NCH_PRMRY_PYR_CD,cnppc,Coalesce with blank string,,"coalesce(CLM_NCH_PRMRY_PYR_CD,'') as cnppc"
+BENE_PTNT_STUS_CD,drdc,Remove NULL if exists,,"coalesce(BENE_PTNT_STUS_CD,'') as drdc"
+DGNS_DRG_CD,drg,Remove null and replace with '',,"coalesce(DGNS_DRG_CD,'') as drg"
+FAC_PRVDR_NPI_NUM,ftnpi,Replace ~ with blank,,"replace(FAC_PRVDR_NPI_NUM,'~','') as ftnpi"
+OPRTG_PRVDR_NPI_NUM,atpnpi,Replace '~' with blank,,"replace(OPRTG_PRVDR_NPI_NUM,'~','') as atpnpi"
+ATNDG_PRVDR_NPI_NUM,spnpi,Replace '~' with empty string,,"replace(ATNDG_PRVDR_NPI_NUM,'~','') as spnpi"
+OTHR_PRVDR_NPI_NUM,otpnpi,Replace ~ with empty string,,"replace(OTHR_PRVDR_NPI_NUM,'~','') as otpnpi"
+CLM_ADJSMT_TYPE_CD,adjs,"Replace
+0 with 'Original'
+1 with 'Cancelled'
+2 with 'Adjusted'",,"translate(CLM_ADJSMT_TYPE_CD,'012','OCA') as adjs"
+CLM_EFCTV_DT,cpdt,Convert all values to date in YYYY-MM-DD format,Do not convert blank or '1000-01-01' or '9999-12-31,"CASE WHEN CLM_EFCTV_DT NOT IN ('','1000-01-01','9999-12-31')  THEN (TO_DATE(CLM_EFCTV_DT,'YYYY-MM-DD')) END as cpdt"
+BENE_EQTBL_BIC_HICN_NUM,ptsid,Remove Null,"if value is ~, then return ''","case when BENE_EQTBL_BIC_HICN_NUM in ('~','')  then '' else coalesce(BENE_EQTBL_BIC_HICN_NUM,'') end as ptsid"
+"CLM_TYPE_CD, CLM_OP_SRVC_TYPE_CD, CLM_ADMSN_TYPE_CD",atc,"If CLM_TYPE_CD is '40', then CLM_OP_SRVC_TYPE_CD
+If CLM_TYPE_CD is not '40', then CLM_ADMSN_TYPE_CD
+Remove '~' ",cast result as varchar(100),"cast((CASE 
+WHEN clm_type_cd = '40' then replace(trim(CLM_OP_SRVC_TYPE_CD),'~','') 
+when clm_type_cd not in ('40') Then replace(trim(CLM_ADMSN_TYPE_CD),'~','') else '' end ) as varchar(100)) AS atc"
+CLM_ADMSN_SRC_CD,rsc,Return blank string if value is '~',,"case when CLM_ADMSN_SRC_CD in ('~','') then '' else CLM_ADMSN_SRC_CD end as rsc"
+CLM_QUERY_CD,tt,Return blank string if value is either 'null' or '~',,"case when CLM_QUERY_CD in ('~','','null') then '' else CLM_QUERY_CD end as tt"
+CLM_QUERY_CD,ttn,"Map
+0 to 'Credit adjustment'
+1 to 'Interim bill'
+2 to 'HHA benefits exhausted'
+3 to 'Final bill'
+4 to 'Discharge notice'
+5 to 'Debit adjustment'",,"case when CLM_QUERY_CD = '0' then 'Credit adjustment'
+when CLM_QUERY_CD = '1' then 'Interim bill'
+when CLM_QUERY_CD = '2' then 'HHA benefits exhausted'
+when CLM_QUERY_CD = '3' then 'Final bill'
+when CLM_QUERY_CD = '4' then 'Discharge notice'
+when CLM_QUERY_CD = '5' then 'Debit adjustment' end as ttn"
+"PRNCPL_DGNS_CD, DGNS_PRCDR_ICD_IND",pdcs,"For DGNS_PRCDR_ICD_IND, map 
+'~' to blank string
+For DGNS_PRCDR_ICD_IND, map
+9 to 'ICD-9'
+0 to 'ICD-10'",,"case when PRNCPL_DGNS_CD in ('','~') then ''
+when DGNS_PRCDR_ICD_IND='9' then 'ICD-9' when DGNS_PRCDR_ICD_IND='0' then 'ICD-10' else ''end as pdcs"
+"CLM_LINE_PROD_REV_CTR_CD, CLM_MDCR_INSTNL_TOT_CHRG_AMT",tcamt,"If CLM_LINE_PROD_REV_CTR_CD is in ('~','null','NULL','0001') then NULL, otherwise CLM_MDCR_INSTNL_TOT_CHRG_AMT","cast as decimal(18,2)","case when trim(CLM_LINE_PROD_REV_CTR_CD) in ('~','null','NULL','0001') then cast(null as decimal(18,2)) else
+CAST (CLM_MDCR_INSTNL_TOT_CHRG_AMT AS decimal(18,2)) end as tcamt"
+"CLM_TYPE_CD, CLM_MDCR_IP_PPS_CPTL_IME_AMT",imeamt,"If CLM_TYPE_CD is not equal to 60 then NULL, otherwise CLM_MDCR_IP_PPS_CPTL_IME_AMT","cast as decimal(18,2)","case when CLM_TYPE_CD != '60' then cast (null as decimal(18,2)) else 
+CAST (CLM_MDCR_IP_PPS_CPTL_IME_AMT AS decimal(18,2)) end as imeamt"
+"CLM_TYPE_CD, CLM_HIPPS_UNCOMPD_CARE_AMT",cuca,"If CLM_TYPE_CD is not in ('10','20','30','40','50','60') then NULL, otherwise CLM_HIPPS_UNCOMPD_CARE_AMT","cast as decimal(18,2)","case when CLM_TYPE_CD not in ('10','20','30','40','50','60')
+then cast (null as decimal(18,2)) else CAST (CLM_HIPPS_UNCOMPD_CARE_AMT AS decimal(18,2)) end as cuca"
+"GEO_USPS_STATE_CD, BENE_FIPS_STATE_CD",pst,"If GEO_USPS_STATE_CD is not in ('', '~', 'null') then GEO_USPS_STATE_CD;
+else if GEO_USPS_STATE_CD is in ('', '~', 'null') and BENE_FIPS_STATE_CD is not in ('', '~', 'null') then map the following -
+'1' and '01' to AL
+'2' and '02' to AK
+'5' and '05' to AR
+11 to DC
+13 to GA
+41 to OR
+72 to PR",,"case when trim(GEO_USPS_STATE_CD) in ('~','','null') and trim(BENE_FIPS_STATE_CD) not in ('~','','null') 
+then 
+(case when trim(BENE_FIPS_STATE_CD) in ('1','01') then 'AL'
+when trim(BENE_FIPS_STATE_CD) in ('2','02') then 'AK'
+when trim(BENE_FIPS_STATE_CD) in ('5','05') then 'AR'
+when trim(BENE_FIPS_STATE_CD) ='11' then 'DC'
+when trim(BENE_FIPS_STATE_CD) ='13' then 'GA'
+when trim(BENE_FIPS_STATE_CD) ='41' then 'OR'
+when trim(BENE_FIPS_STATE_CD) ='72' then 'PR'
+else '' end)
+when trim(GEO_USPS_STATE_CD) not in ('~','','null') then GEO_USPS_STATE_CD else '' end as pst"
+BENE_FIPS_CNTY_CD,pct,Coalesce with '',,"coalesce(BENE_FIPS_CNTY_CD,'') as pct"
+GEO_ZIP_PLC_NAME,pci,Coalesce with '' if  value is '~',,"case when GEO_ZIP_PLC_NAME in ('~','') then '' else coalesce(GEO_ZIP_PLC_NAME,'') end as pci"
+BENE_LINE_1_ADR,psa1,Coalesce with '',,"coalesce(BENE_LINE_1_ADR,'') AS psa1"
+"BENE_LINE_2_ADR, BENE_LINE_3_ADR, BENE_LINE_4_ADR, BENE_LINE_5_ADR, BENE_LINE_6_ADR",psa2,"Concatenate all columns with comma (,) in between","Coalesce with '' before joining.
+Remove any trailing commas","regexp_replace(regexp_replace( trim(coalesce(BENE_LINE_2_ADR,'')||', '||coalesce(BENE_LINE_3_ADR,'')||', '||coalesce(BENE_LINE_4_ADR,'')||', '||coalesce(BENE_LINE_5_ADR,'')||', '||coalesce(BENE_LINE_6_ADR,'')),'( ,)+$',''),',$','') as psa2"
+BENE_DOB,dob,"If not '' or '1000-01-01' or '9999-12-31, convert to YYYY-MM-DD",,"CASE WHEN BENE_DOB NOT IN ('','1000-01-01','9999-12-31') THEN (TO_DATE(BENE_DOB,'YYYY-MM-DD')) END as dob"
+BENE_PART_A_ENRLMT_BGN_DT,bedpa,"If value is not '' or '1000-01-01' or '9999-12-31, convert to date in YYYY-MM-DD format",,"CASE WHEN BENE_PART_A_ENRLMT_BGN_DT NOT IN ('','1000-01-01','9999-12-31') THEN (TO_DATE(BENE_PART_A_ENRLMT_BGN_DT,'YYYY-MM-DD'))END as bedpa"
+BENE_PART_B_ENRLMT_BGN_DT,bedpb,Convert all values to date in YYYY-MM-DD format which are not '' or '1000-01-01' or '9999-12-31,,"CASE WHEN BENE_PART_B_ENRLMT_BGN_DT NOT IN ('','1000-01-01','9999-12-31') THEN (TO_DATE(BENE_PART_B_ENRLMT_BGN_DT,'YYYY-MM-DD'))END as bedpb"
+BENE_SEX_CD,gn,"Map
+0 to U
+1 to M
+2 to F",,case when BENE_SEX_CD = '0' then 'U' when BENE_SEX_CD = '1' then 'M' when BENE_SEX_CD = '2' then 'F' else 'U' end as gn
+BENE_RACE_CD,race,If `~` then '',,"case when BENE_RACE_CD in ('~','') then '' else BENE_RACE_CD end as race"
+BENE_RACE_CD,racen,"Map
+0 to Unknown
+1 to White
+2 to Black
+3 to Other
+4 to Asian
+5 to Hispanic
+6 to North American Native",,"case when BENE_RACE_CD = '0' then 'Unknown'
+when BENE_RACE_CD = '1' then 'White'
+when BENE_RACE_CD = '2' then 'Black'
+when BENE_RACE_CD = '3' then 'Other'
+when BENE_RACE_CD = '4' then 'Asian'
+when BENE_RACE_CD = '5' then 'Hispanic'
+when BENE_RACE_CD = '6' then 'North American Native' end as racen"
+BENE_MDCR_STUS_CD,bfmdst,,,BENE_MDCR_STUS_CD as bfmdst
+BENE_DUAL_STUS_CD,bfsdcd,,,BENE_DUAL_STUS_CD as bfsdcd
+BENE_DEATH_DT,dod,"If not '' or '1000-01-01' or '9999-12-31, convert to YYYY-MM-DD",,"CASE WHEN BENE_DEATH_DT NOT IN ('','1000-01-01','9999-12-31')  THEN (TO_DATE(BENE_DEATH_DT,'YYYY-MM-DD')) END as dod"
+BENE_RNG_BGN_DT,hpstdt,"If not '' or '1000-01-01' or '9999-12-31, convert to YYYY-MM-DD",,"CASE WHEN BENE_RNG_BGN_DT NOT IN ('','1000-01-01','9999-12-31')  THEN (TO_DATE(BENE_RNG_BGN_DT,'YYYY-MM-DD'))END as hpstdt"
+BENE_RNG_END_DT,hpenddt,"If not '' or '1000-01-01' or '9999-12-31, convert to YYYY-MM-DD",,"CASE WHEN BENE_RNG_END_DT NOT IN ('','1000-01-01','9999-12-31')  THEN (TO_DATE(BENE_RNG_END_DT,'YYYY-MM-DD')) END AS hpenddt"
+BENE_1ST_NAME,fn,Coalesce with '',Remove leading or trailing whitespaces,"coalesce(trim(BENE_1ST_NAME),'') as fn"
+BENE_MIDL_NAME,mn,Coalesce with '',Remove leading or trailing whitespaces,"coalesce(trim(BENE_MIDL_NAME),'') as mn"
+BENE_LAST_NAME,ln,Coalesce with '',Remove leading or trailing whitespaces,"coalesce(trim(BENE_LAST_NAME),'') as ln"
+BENE_ORGNL_ENTLMT_RSN_CD,orec,Coalesce with '',Remove leading or trailing whitespaces,"coalesce(trim(BENE_ORGNL_ENTLMT_RSN_CD),'') as orec"
+BENE_ENTLMT_BUYIN_IND,byind,Coalesce with '',Remove leading or trailing whitespaces,"coalesce(trim(BENE_ENTLMT_BUYIN_IND),'') as byind"
+BENE_DEATH_DT,df,"If not '' or '1000-01-01' or '9999-12-31, then 'Y' else 'N'",,"CASE WHEN BENE_DEATH_DT NOT IN ('','1000-01-01','9999-12-31')  THEN 'Y' else 'N' END as df"
+PIPELINE_ID,pipid,No transformation,,PIPELINE_ID as pipid
+SFN,rcdt,Use regex to extract month,Regex - 'D\\d+',"date_trunc('month',to_date(REPLACE(regexp_substr(SFN,'D\\d+'),'D',''),'YYMMDD')) as rcdt"
+BENE_HIC_NUM,pthcno,Remove null if exists,,"COALESCE(BENE_HIC_NUM,'') as pthcno"
+CDSCL,pdn,Coalesce with '',,"coalesce(CDSCL,'') as pdn"

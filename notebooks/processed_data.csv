@@ -1,0 +1,776 @@
+prompt,completion
+"Write a SQL query for transforming BENE_FIPS_STATE_CD into pst, and apply the following transformation:
+Map
+AR to Arkansas
+CT to Connecticut
+DC to District of Columbia
+FL to Florida
+GA to Georgia
+HI to Hawaii
+IA to Iowa
+KS to Kansas
+LA to Louisiana
+MA to Massachusetts
+NY to New York
+OR to Oregon
+PA to Pennsylvania
+RI to Rhode Island
+SC to South Carolina
+TN to Tennessee
+UT to Utah
+VA to Virginia
+VT to Vermont
+WA to Washington
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when BENE_FIPS_STATE_CD= 'AR' then 'Arkansas'
+when BENE_FIPS_STATE_CD = 'CT' then 'Connecticut'
+when BENE_FIPS_STATE_CD = 'DC' then 'District of Columbia'
+when BENE_FIPS_STATE_CD = 'FL' then 'Florida'
+when BENE_FIPS_STATE_CD = 'GA' then 'Georgia'
+when BENE_FIPS_STATE_CD = 'HI' then 'Hawaii'
+when BENE_FIPS_STATE_CD = 'IA' then 'Iowa'
+when BENE_FIPS_STATE_CD = 'KS' then 'Kansas'
+when BENE_FIPS_STATE_CD = 'LA' then 'Louisiana'
+when BENE_FIPS_STATE_CD = 'MA' then 'Massachusetts'
+when BENE_FIPS_STATE_CD  = 'NY' then 'New York'
+when BENE_FIPS_STATE_CD  = 'OR' then 'Oregon'
+when BENE_FIPS_STATE_CD  = 'PA' then 'Pennsylvania'
+when BENE_FIPS_STATE_CD  = 'RI' then 'Rhode Island'
+when BENE_FIPS_STATE_CD  = 'SC' then 'South Carolina'
+when BENE_FIPS_STATE_CD  = 'TN' then 'Tennessee'
+when BENE_FIPS_STATE_CD  = 'UT' then 'Utah'
+when BENE_FIPS_STATE_CD  = 'VA' then 'Virginia'
+when BENE_FIPS_STATE_CD  = 'VT' then 'Vermont'
+when BENE_FIPS_STATE_CD  = 'WA' then 'Washington'
+end as pst from your_table; ###"
+"Write a SQL query for transforming CLM_LINE_NUM into clid, and apply the following transformation:
+No transformation
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+", select CLM_LINE_NUM as clid from your_table; ###
+"Write a SQL query for transforming ALPHA_CODE into ftst, and apply the following transformation:
+Coalesce with '' to remove any NULL values
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select coalesce(ALPHA_CODE,'') as ftst from your_table; ###"
+"Write a SQL query for transforming BENE_PTNT_STUS_CD into drdn, and apply the following transformation:
+Mapper to be put here -
+02=Discharged/transferred to other short term general hospital for inpatient care.
+04=Discharged/transferred to intermediate care facility (ICF).
+07=Left against medical advice or discontinued care.
+30=Still patient
+63=Discharged/transferred to a long term care hospitals. (eff. 1/2002)
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when BENE_PTNT_STUS_CD = '02' then 'Discharged/transferred to other short term general hospital for inpatient care.'
+when BENE_PTNT_STUS_CD = '04' then 'Discharged/transferred to intermediate care facility (ICF).'
+when BENE_PTNT_STUS_CD = '07' then 'Left against medical advice or discontinued care.'
+when BENE_PTNT_STUS_CD = '30' then 'Still patient'
+when BENE_PTNT_STUS_CD = '63' then 'Discharged/transferred to a long term care hospitals. (eff. 1/2002)' end as drdn from your_table; ###"
+"Write a SQL query for transforming CLM_FROM_DT into efdt, and apply the following transformation:
+Date should not be blank, or '1000-01-01' or '9999-12-31. Convert values to date in YYYY-MM-DD format
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select CASE WHEN CLM_FROM_DT NOT IN ('','1000-01-01','9999-12-31') THEN(TO_DATE(CLM_FROM_DT,'YYYY-MM-DD')) END AS  efdt
+ from your_table; ###"
+"Write a SQL query for transforming CLM_THRU_DT into eldt, and apply the following transformation:
+Convert values to date in YYYY-MM-DD format if value is not '' or '1000-01-01' or '9999-12-31
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select CASE WHEN CLM_THRU_DT NOT IN ('','1000-01-01','9999-12-31') THEN (TO_DATE(CLM_THRU_DT,'YYYY-MM-DD')) END AS  eldt
+ from your_table; ###"
+"Write a SQL query for transforming CLM_LINE_FROM_DT into clsfdt, and apply the following transformation:
+Convert to date (YYYY-MM-DD). Date must not be in ('','1000-01-01','9999-12-31')
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select CASE WHEN CLM_FROM_DT NOT IN ('','1000-01-01','9999-12-31') THEN (TO_DATE(CLM_FROM_DT,'YYYY-MM-DD')) END AS  clsfdt
+ from your_table; ###"
+"Write a SQL query for transforming CLM_LINE_THRU_DT into clsldt, and apply the following transformation:
+Convert to date (YYYY-MM-DD). Date must not be in ('','1000-01-01','9999-12-31')
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select CASE WHEN CLM_LINE_THRU_DTNOT IN ('','1000-01-01','9999-12-31') THEN (TO_DATE(CLM_LINE_THRU_DT,'YYYY-MM-DD')) END AS  clsldt from your_table; ###"
+"Write a SQL query for transforming CLM_LINE_PROD_REV_CTR_CD into rcc, and apply the following transformation:
+Return an empty string if value is blank or '~', otherwise return the value of the column
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when CLM_LINE_PROD_REV_CTR_CD in ('~','') then '' else CLM_LINE_PROD_REV_CTR_CD end as rcc from your_table; ###"
+"Write a SQL query for transforming CLM_LINE_PROD_REV_CTR_CD, CLM_LINE_HCPCS_CD into pc, and apply the following transformation:
+Return an empty string if value in CLM_LINE_PROD_REV_CTR_CD is either '~' or '0022', otherwise coalesce CLM_LINE_HCPCS_CD and ''
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when CLM_LINE_PROD_REV_CTR_CD in ('~','0022') THEN '' else coalesce(CLM_LINE_HCPCS_CD,'') end as pc from your_table; ###"
+"Write a SQL query for transforming CLM_LINE_SRVC_UNIT_QTY into uqt, and apply the following transformation:
+No transformation
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+", select CLM_LINE_SRVC_UNIT_QTY as uqt from your_table; ###
+"Write a SQL query for transforming CLM_LINE_CVRD_PD_AMT into catp, and apply the following transformation:
+Typecast to numeric data with precision=18 and scale=2
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select cast (CLM_LINE_CVRD_PD_AMT as numeric(18,2)) as catp from your_table; ###"
+"Write a SQL query for transforming HCPCS_1_MDFR_CD into pm1, and apply the following transformation:
+If value is not '~' then remove Null value else return empty string
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when HCPCS_1_MDFR_CD in ('~','') then '' else coalesce(HCPCS_1_MDFR_CD,'') end as pm1 from your_table; ###"
+"Write a SQL query for transforming HCPCS_2_MDFR_CD into pm2, and apply the following transformation:
+If value is '~` then '' else remove null value
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when HCPCS_2_MDFR_CD in ('~','') then '' else coalesce(HCPCS_2_MDFR_CD,'') end as pm2 from your_table; ###"
+"Write a SQL query for transforming HCPCS_3_MDFR_CD into pm3, and apply the following transformation:
+Remove null if value is not '~' else return ''
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when HCPCS_3_MDFR_CD in ('~','') then '' else coalesce(HCPCS_3_MDFR_CD,'') end as pm3 from your_table; ###"
+"Write a SQL query for transforming HCPCS_4_MDFR_CD into pm4, and apply the following transformation:
+Return '' if value is '~' else remove null if exists
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when HCPCS_4_MDFR_CD in ('~','') then '' else coalesce(HCPCS_4_MDFR_CD,'') end as pm4 from your_table; ###"
+"Write a SQL query for transforming HCPCS_5_MDFR_CD into pm5, and apply the following transformation:
+Return empty string if value is '~' else coalesce with ''
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when HCPCS_5_MDFR_CD in ('~','') then '' else coalesce(HCPCS_5_MDFR_CD,'') end as pm5 from your_table; ###"
+"Write a SQL query for transforming CLM_REV_APC_HIPPS_CD into ahc, and apply the following transformation:
+Return empty string if value is '~' else coalesce with ''
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when CLM_REV_APC_HIPPS_CDnot in ('','~') then coalesce(CLM_REV_APC_HIPPS_CD,'') else '' end as ahc from your_table; ###"
+"Write a SQL query for transforming CUR_CLM_UNIQ_ID into cid, and apply the following transformation:
+Trim any trailing or leading whitespaces
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+", select trim(CUR_CLM_UNIQ_ID) as cid from your_table; ###
+"Write a SQL query for transforming BENE_MBI_ID into id, and apply the following transformation:
+Remove trailing or leading whitespaces
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+", select trim(bene_mbi_id) as id from your_table; ###
+"Write a SQL query for transforming PRVDR_OSCAR_NUM into ftccn, and apply the following transformation:
+Return an empty string if value is either '', '~' or 'null', otherwise coalesce with ''
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when PRVDR_OSCAR_NUM in ('~','','null') then '' else coalesce(PRVDR_OSCAR_NUM,'') end as ftccn from your_table; ###"
+"Write a SQL query for transforming CLM_TYPE_CD into cftc, and apply the following transformation:
+No transformation
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+", select CLM_TYPE_CD as cftc from your_table; ###
+"Write a SQL query for transforming CLM_FROM_DT into pfdt, and apply the following transformation:
+Convert all values to date in YYYY-MM-DD format which are not '' or '1000-01-01' or '9999-12-31
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select CASE WHEN CLM_FROM_DT NOT IN ('','1000-01-01','9999-12-31')  THEN(TO_DATE(CLM_FROM_DT,'YYYY-MM-DD')) END AS  pfdt from your_table; ###"
+"Write a SQL query for transforming CLM_BILL_FAC_TYPE_CD, CLM_BILL_CLSFCTN_CD, CLM_BILL_FREQ_CD into bt, and apply the following transformation:
+Concatenate the columns
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+", select (CLM_BILL_FAC_TYPE_CD||CLM_BILL_CLSFCTN_CD||CLM_BILL_FREQ_CD) as bt from your_table; ###
+"Write a SQL query for transforming PRNCPL_DGNS_CD into pd, and apply the following transformation:
+Coalesce with blank string
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select coalesce(PRNCPL_DGNS_CD,'') as pd from your_table; ###"
+"Write a SQL query for transforming ADMTG_DGNS_CD into ad, and apply the following transformation:
+Return an empty string if value is either '~' or blank, otherwise coalesce with ''
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when ADMTG_DGNS_CD in ('~','') then '' else coalesce(ADMTG_DGNS_CD,'') end as ad from your_table; ###"
+"Write a SQL query for transforming CLM_MDCR_NPMT_RSN_CD into cmnpr, and apply the following transformation:
+Concatenate all non-blank values with 'i'
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+", select CASE WHEN CLM_MDCR_NPMT_RSN_CD != '' then ('i'||clm_mdcr_npmt_rsn_cd) else '' end as cmnpr from your_table; ###
+"Write a SQL query for transforming CLM_PMT_AMT into pih, and apply the following transformation:
+Typecast to numeric data with precision of 18 and scale of 2
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select cast(CLM_PMT_AMT as numeric (18,2)) as pih from your_table; ###"
+"Write a SQL query for transforming CLM_NCH_PRMRY_PYR_CD into cnppc, and apply the following transformation:
+Coalesce with blank string
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select coalesce(CLM_NCH_PRMRY_PYR_CD,'') as cnppc from your_table; ###"
+"Write a SQL query for transforming BENE_PTNT_STUS_CD into drdc, and apply the following transformation:
+Remove NULL if exists
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select coalesce(BENE_PTNT_STUS_CD,'') as drdc from your_table; ###"
+"Write a SQL query for transforming DGNS_DRG_CD into drg, and apply the following transformation:
+Remove null and replace with ''
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select coalesce(DGNS_DRG_CD,'') as drg from your_table; ###"
+"Write a SQL query for transforming FAC_PRVDR_NPI_NUM into ftnpi, and apply the following transformation:
+Replace ~ with blank
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select replace(FAC_PRVDR_NPI_NUM,'~','') as ftnpi from your_table; ###"
+"Write a SQL query for transforming OPRTG_PRVDR_NPI_NUM into atpnpi, and apply the following transformation:
+Replace '~' with blank
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select replace(OPRTG_PRVDR_NPI_NUM,'~','') as atpnpi from your_table; ###"
+"Write a SQL query for transforming ATNDG_PRVDR_NPI_NUM into spnpi, and apply the following transformation:
+Replace '~' with empty string
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select replace(ATNDG_PRVDR_NPI_NUM,'~','') as spnpi from your_table; ###"
+"Write a SQL query for transforming OTHR_PRVDR_NPI_NUM into otpnpi, and apply the following transformation:
+Replace ~ with empty string
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select replace(OTHR_PRVDR_NPI_NUM,'~','') as otpnpi from your_table; ###"
+"Write a SQL query for transforming CLM_ADJSMT_TYPE_CD into adjs, and apply the following transformation:
+Replace
+0 with 'Original'
+1 with 'Cancelled'
+2 with 'Adjusted'
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select translate(CLM_ADJSMT_TYPE_CD,'012','OCA') as adjs from your_table; ###"
+"Write a SQL query for transforming CLM_EFCTV_DT into cpdt, and apply the following transformation:
+Convert all values to date in YYYY-MM-DD format
+Do not convert blank or '1000-01-01' or '9999-12-31
+Do not convert blank or '1000-01-01' or '9999-12-31
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select CASE WHEN CLM_EFCTV_DT NOT IN ('','1000-01-01','9999-12-31')  THEN (TO_DATE(CLM_EFCTV_DT,'YYYY-MM-DD')) END as cpdt from your_table; ###"
+"Write a SQL query for transforming BENE_EQTBL_BIC_HICN_NUM into ptsid, and apply the following transformation:
+Remove Null
+if value is ~, then return ''
+if value is ~, then return ''
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when BENE_EQTBL_BIC_HICN_NUM in ('~','')  then '' else coalesce(BENE_EQTBL_BIC_HICN_NUM,'') end as ptsid from your_table; ###"
+"Write a SQL query for transforming CLM_TYPE_CD, CLM_OP_SRVC_TYPE_CD, CLM_ADMSN_TYPE_CD into atc, and apply the following transformation:
+If CLM_TYPE_CD is '40', then CLM_OP_SRVC_TYPE_CD
+If CLM_TYPE_CD is not '40', then CLM_ADMSN_TYPE_CD
+Remove '~' 
+cast result as varchar(100)
+cast result as varchar(100)
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select cast((CASE 
+WHEN clm_type_cd = '40' then replace(trim(CLM_OP_SRVC_TYPE_CD),'~','') 
+when clm_type_cd not in ('40') Then replace(trim(CLM_ADMSN_TYPE_CD),'~','') else '' end ) as varchar(100)) AS atc from your_table; ###"
+"Write a SQL query for transforming CLM_ADMSN_SRC_CD into rsc, and apply the following transformation:
+Return blank string if value is '~'
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when CLM_ADMSN_SRC_CD in ('~','') then '' else CLM_ADMSN_SRC_CD end as rsc from your_table; ###"
+"Write a SQL query for transforming CLM_QUERY_CD into tt, and apply the following transformation:
+Return blank string if value is either 'null' or '~'
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when CLM_QUERY_CD in ('~','','null') then '' else CLM_QUERY_CD end as tt from your_table; ###"
+"Write a SQL query for transforming CLM_QUERY_CD into ttn, and apply the following transformation:
+Map
+0 to 'Credit adjustment'
+1 to 'Interim bill'
+2 to 'HHA benefits exhausted'
+3 to 'Final bill'
+4 to 'Discharge notice'
+5 to 'Debit adjustment'
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when CLM_QUERY_CD = '0' then 'Credit adjustment'
+when CLM_QUERY_CD = '1' then 'Interim bill'
+when CLM_QUERY_CD = '2' then 'HHA benefits exhausted'
+when CLM_QUERY_CD = '3' then 'Final bill'
+when CLM_QUERY_CD = '4' then 'Discharge notice'
+when CLM_QUERY_CD = '5' then 'Debit adjustment' end as ttn from your_table; ###"
+"Write a SQL query for transforming PRNCPL_DGNS_CD, DGNS_PRCDR_ICD_IND into pdcs, and apply the following transformation:
+For DGNS_PRCDR_ICD_IND, map 
+'~' to blank string
+For DGNS_PRCDR_ICD_IND, map
+9 to 'ICD-9'
+0 to 'ICD-10'
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when PRNCPL_DGNS_CD in ('','~') then ''
+when DGNS_PRCDR_ICD_IND='9' then 'ICD-9' when DGNS_PRCDR_ICD_IND='0' then 'ICD-10' else ''end as pdcs from your_table; ###"
+"Write a SQL query for transforming CLM_LINE_PROD_REV_CTR_CD, CLM_MDCR_INSTNL_TOT_CHRG_AMT into tcamt, and apply the following transformation:
+If CLM_LINE_PROD_REV_CTR_CD is in ('~','null','NULL','0001') then NULL, otherwise CLM_MDCR_INSTNL_TOT_CHRG_AMT
+cast as decimal(18,2)
+cast as decimal(18,2)
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when trim(CLM_LINE_PROD_REV_CTR_CD) in ('~','null','NULL','0001') then cast(null as decimal(18,2)) else
+CAST (CLM_MDCR_INSTNL_TOT_CHRG_AMT AS decimal(18,2)) end as tcamt from your_table; ###"
+"Write a SQL query for transforming CLM_TYPE_CD, CLM_MDCR_IP_PPS_CPTL_IME_AMT into imeamt, and apply the following transformation:
+If CLM_TYPE_CD is not equal to 60 then NULL, otherwise CLM_MDCR_IP_PPS_CPTL_IME_AMT
+cast as decimal(18,2)
+cast as decimal(18,2)
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when CLM_TYPE_CD != '60' then cast (null as decimal(18,2)) else 
+CAST (CLM_MDCR_IP_PPS_CPTL_IME_AMT AS decimal(18,2)) end as imeamt from your_table; ###"
+"Write a SQL query for transforming CLM_TYPE_CD, CLM_HIPPS_UNCOMPD_CARE_AMT into cuca, and apply the following transformation:
+If CLM_TYPE_CD is not in ('10','20','30','40','50','60') then NULL, otherwise CLM_HIPPS_UNCOMPD_CARE_AMT
+cast as decimal(18,2)
+cast as decimal(18,2)
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when CLM_TYPE_CD not in ('10','20','30','40','50','60')
+then cast (null as decimal(18,2)) else CAST (CLM_HIPPS_UNCOMPD_CARE_AMT AS decimal(18,2)) end as cuca from your_table; ###"
+"Write a SQL query for transforming GEO_USPS_STATE_CD, BENE_FIPS_STATE_CD into pst, and apply the following transformation:
+If GEO_USPS_STATE_CD is not in ('', '~', 'null') then GEO_USPS_STATE_CD;
+else if GEO_USPS_STATE_CD is in ('', '~', 'null') and BENE_FIPS_STATE_CD is not in ('', '~', 'null') then map the following -
+'1' and '01' to AL
+'2' and '02' to AK
+'5' and '05' to AR
+11 to DC
+13 to GA
+41 to OR
+72 to PR
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when trim(GEO_USPS_STATE_CD) in ('~','','null') and trim(BENE_FIPS_STATE_CD) not in ('~','','null') 
+then 
+(case when trim(BENE_FIPS_STATE_CD) in ('1','01') then 'AL'
+when trim(BENE_FIPS_STATE_CD) in ('2','02') then 'AK'
+when trim(BENE_FIPS_STATE_CD) in ('5','05') then 'AR'
+when trim(BENE_FIPS_STATE_CD) ='11' then 'DC'
+when trim(BENE_FIPS_STATE_CD) ='13' then 'GA'
+when trim(BENE_FIPS_STATE_CD) ='41' then 'OR'
+when trim(BENE_FIPS_STATE_CD) ='72' then 'PR'
+else '' end)
+when trim(GEO_USPS_STATE_CD) not in ('~','','null') then GEO_USPS_STATE_CD else '' end as pst from your_table; ###"
+"Write a SQL query for transforming BENE_FIPS_CNTY_CD into pct, and apply the following transformation:
+Coalesce with ''
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select coalesce(BENE_FIPS_CNTY_CD,'') as pct from your_table; ###"
+"Write a SQL query for transforming GEO_ZIP_PLC_NAME into pci, and apply the following transformation:
+Coalesce with '' if  value is '~'
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when GEO_ZIP_PLC_NAME in ('~','') then '' else coalesce(GEO_ZIP_PLC_NAME,'') end as pci from your_table; ###"
+"Write a SQL query for transforming BENE_LINE_1_ADR into psa1, and apply the following transformation:
+Coalesce with ''
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select coalesce(BENE_LINE_1_ADR,'') AS psa1 from your_table; ###"
+"Write a SQL query for transforming BENE_LINE_2_ADR, BENE_LINE_3_ADR, BENE_LINE_4_ADR, BENE_LINE_5_ADR, BENE_LINE_6_ADR into psa2, and apply the following transformation:
+Concatenate all columns with comma (,) in between
+Coalesce with '' before joining.
+Remove any trailing commas
+Coalesce with '' before joining.
+Remove any trailing commas
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select regexp_replace(regexp_replace( trim(coalesce(BENE_LINE_2_ADR,'')||', '||coalesce(BENE_LINE_3_ADR,'')||', '||coalesce(BENE_LINE_4_ADR,'')||', '||coalesce(BENE_LINE_5_ADR,'')||', '||coalesce(BENE_LINE_6_ADR,'')),'( ,)+$',''),',$','') as psa2 from your_table; ###"
+"Write a SQL query for transforming BENE_DOB into dob, and apply the following transformation:
+If not '' or '1000-01-01' or '9999-12-31, convert to YYYY-MM-DD
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select CASE WHEN BENE_DOB NOT IN ('','1000-01-01','9999-12-31') THEN (TO_DATE(BENE_DOB,'YYYY-MM-DD')) END as dob from your_table; ###"
+"Write a SQL query for transforming BENE_PART_A_ENRLMT_BGN_DT into bedpa, and apply the following transformation:
+If value is not '' or '1000-01-01' or '9999-12-31, convert to date in YYYY-MM-DD format
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select CASE WHEN BENE_PART_A_ENRLMT_BGN_DT NOT IN ('','1000-01-01','9999-12-31') THEN (TO_DATE(BENE_PART_A_ENRLMT_BGN_DT,'YYYY-MM-DD'))END as bedpa from your_table; ###"
+"Write a SQL query for transforming BENE_PART_B_ENRLMT_BGN_DT into bedpb, and apply the following transformation:
+Convert all values to date in YYYY-MM-DD format which are not '' or '1000-01-01' or '9999-12-31
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select CASE WHEN BENE_PART_B_ENRLMT_BGN_DT NOT IN ('','1000-01-01','9999-12-31') THEN (TO_DATE(BENE_PART_B_ENRLMT_BGN_DT,'YYYY-MM-DD'))END as bedpb from your_table; ###"
+"Write a SQL query for transforming BENE_SEX_CD into gn, and apply the following transformation:
+Map
+0 to U
+1 to M
+2 to F
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+", select case when BENE_SEX_CD = '0' then 'U' when BENE_SEX_CD = '1' then 'M' when BENE_SEX_CD = '2' then 'F' else 'U' end as gn from your_table; ###
+"Write a SQL query for transforming BENE_RACE_CD into race, and apply the following transformation:
+If `~` then ''
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when BENE_RACE_CD in ('~','') then '' else BENE_RACE_CD end as race from your_table; ###"
+"Write a SQL query for transforming BENE_RACE_CD into racen, and apply the following transformation:
+Map
+0 to Unknown
+1 to White
+2 to Black
+3 to Other
+4 to Asian
+5 to Hispanic
+6 to North American Native
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select case when BENE_RACE_CD = '0' then 'Unknown'
+when BENE_RACE_CD = '1' then 'White'
+when BENE_RACE_CD = '2' then 'Black'
+when BENE_RACE_CD = '3' then 'Other'
+when BENE_RACE_CD = '4' then 'Asian'
+when BENE_RACE_CD = '5' then 'Hispanic'
+when BENE_RACE_CD = '6' then 'North American Native' end as racen from your_table; ###"
+"Write a SQL query for transforming BENE_MDCR_STUS_CD into bfmdst, and apply the following transformation:
+No transformation
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+", select BENE_MDCR_STUS_CD as bfmdst from your_table; ###
+"Write a SQL query for transforming BENE_DUAL_STUS_CD into bfsdcd, and apply the following transformation:
+No transformation
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+", select BENE_DUAL_STUS_CD as bfsdcd from your_table; ###
+"Write a SQL query for transforming BENE_DEATH_DT into dod, and apply the following transformation:
+If not '' or '1000-01-01' or '9999-12-31, convert to YYYY-MM-DD
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select CASE WHEN BENE_DEATH_DT NOT IN ('','1000-01-01','9999-12-31')  THEN (TO_DATE(BENE_DEATH_DT,'YYYY-MM-DD')) END as dod from your_table; ###"
+"Write a SQL query for transforming BENE_RNG_BGN_DT into hpstdt, and apply the following transformation:
+If not '' or '1000-01-01' or '9999-12-31, convert to YYYY-MM-DD
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select CASE WHEN BENE_RNG_BGN_DT NOT IN ('','1000-01-01','9999-12-31')  THEN (TO_DATE(BENE_RNG_BGN_DT,'YYYY-MM-DD'))END as hpstdt from your_table; ###"
+"Write a SQL query for transforming BENE_RNG_END_DT into hpenddt, and apply the following transformation:
+If not '' or '1000-01-01' or '9999-12-31, convert to YYYY-MM-DD
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select CASE WHEN BENE_RNG_END_DT NOT IN ('','1000-01-01','9999-12-31')  THEN (TO_DATE(BENE_RNG_END_DT,'YYYY-MM-DD')) END AS hpenddt from your_table; ###"
+"Write a SQL query for transforming BENE_1ST_NAME into fn, and apply the following transformation:
+Coalesce with ''
+Remove leading or trailing whitespaces
+Remove leading or trailing whitespaces
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select coalesce(trim(BENE_1ST_NAME),'') as fn from your_table; ###"
+"Write a SQL query for transforming BENE_MIDL_NAME into mn, and apply the following transformation:
+Coalesce with ''
+Remove leading or trailing whitespaces
+Remove leading or trailing whitespaces
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select coalesce(trim(BENE_MIDL_NAME),'') as mn from your_table; ###"
+"Write a SQL query for transforming BENE_LAST_NAME into ln, and apply the following transformation:
+Coalesce with ''
+Remove leading or trailing whitespaces
+Remove leading or trailing whitespaces
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select coalesce(trim(BENE_LAST_NAME),'') as ln from your_table; ###"
+"Write a SQL query for transforming BENE_ORGNL_ENTLMT_RSN_CD into orec, and apply the following transformation:
+Coalesce with ''
+Remove leading or trailing whitespaces
+Remove leading or trailing whitespaces
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select coalesce(trim(BENE_ORGNL_ENTLMT_RSN_CD),'') as orec from your_table; ###"
+"Write a SQL query for transforming BENE_ENTLMT_BUYIN_IND into byind, and apply the following transformation:
+Coalesce with ''
+Remove leading or trailing whitespaces
+Remove leading or trailing whitespaces
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select coalesce(trim(BENE_ENTLMT_BUYIN_IND),'') as byind from your_table; ###"
+"Write a SQL query for transforming BENE_DEATH_DT into df, and apply the following transformation:
+If not '' or '1000-01-01' or '9999-12-31, then 'Y' else 'N'
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select CASE WHEN BENE_DEATH_DT NOT IN ('','1000-01-01','9999-12-31')  THEN 'Y' else 'N' END as df from your_table; ###"
+"Write a SQL query for transforming PIPELINE_ID into pipid, and apply the following transformation:
+No transformation
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+", select PIPELINE_ID as pipid from your_table; ###
+"Write a SQL query for transforming SFN into rcdt, and apply the following transformation:
+Use regex to extract month
+Regex - 'D\\d+'
+Regex - 'D\\d+'
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select date_trunc('month',to_date(REPLACE(regexp_substr(SFN,'D\\d+'),'D',''),'YYMMDD')) as rcdt from your_table; ###"
+"Write a SQL query for transforming BENE_HIC_NUM into pthcno, and apply the following transformation:
+Remove null if exists
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select COALESCE(BENE_HIC_NUM,'') as pthcno from your_table; ###"
+"Write a SQL query for transforming CDSCL into pdn, and apply the following transformation:
+Coalesce with ''
+
+
+The output query should be like - ""select <prediction here> from your_table;""
+
+###
+
+"," select coalesce(CDSCL,'') as pdn from your_table; ###"
